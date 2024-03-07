@@ -1,5 +1,6 @@
 # Python prehľad
 
+
 # Základné dátové typy, s ktorými budeme narábať: str, int, float list, dict, tuple, bool, None
 # str - slová, texty, sú v úvodzovkách napr: "slovo"
 # int - celé čísla, napr: 5, 7
@@ -42,6 +43,7 @@ print(my_list + my_list_2)
 # [1, 2, 3, 4, 8, 9]
 
 # Môžeme vyberať celé časti listov
+# Fancy indexing
 # Do hranatých zátvoriek dáme indexy [od:do]
 # od - je vrátane
 # do - prvok s tým indexom už nerátame
@@ -71,7 +73,7 @@ print(my_dict["city"])
 
 my_dict["age"] = 30
 print(my_dict)
-# {'name': 'John', 'age': 30, 'city': 'New York', 'occupation': 'Engineer'}
+# {'name': 'John', 'age': 30, 'city': 'New York'}
 
 my_dict["occupation"] = "Engineer"
 print(my_dict)
@@ -119,7 +121,7 @@ def sum_numbers_default(a: int, b: int = 1) -> int:
 
 
 # Nezadali sme druhý parameter, ale má defaultnú hodnotu 1. Preto bude súčet 3
-print(sum_numbers_default(2))
+print(sum_numbers_default(a=2))
 # 3
 
 
