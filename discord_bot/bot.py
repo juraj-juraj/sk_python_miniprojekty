@@ -70,7 +70,67 @@ async def guess_letter(ctx: discord.ext.commands.context.Context, letter: str):
 
 
 @bot.command(name="guess_word")
-async def guess_word(ctx: discord.ext.commands.context.Context, word: str): ...
+async def guess_word(ctx: discord.ext.commands.context.Context, word: str):
+    global secret_word
+    global guessed_letter
+    global lives
+
+    if lives <= 0:
+        await ctx.send("Game over")
+        return
+
+    if secret_word == word:
+        guessed_letter = secret_word
+        await ctx.send("You guessed word word right")
+    else:
+        lives -= 1
+        await ctx.send("You guessed wrong")
+
+
+@bot.event
+async def on_message(message: discord.Message):
+    if message.author == bot.user:
+        return
+
+    print(f"Message from: {message.author.name}")
+    if isinstance(message.channel, discord.channel.TextChannel):
+        if message.channel.name == "15":
+            print("Replying")
+            await bot.process_commands(message)
+
+
+class UserNotepad:
+
+    def __init__(self, user_name) -> None:
+        self.name = user_name
+        self.notes: list[str] = []
+
+    def set_name(self, name: str):
+        self.name = name
+
+    def say_name(self):
+        print(self.name)
+
+    def add_note(self, note: str):
+        self.notes.append(note)
+
+
+Notepads: dict[int, UserNotepad] = {}
+
+
+@bot.command("add_to_notepad")
+async def add_to_notepad(ctx: discord.ext.commands.context.Context, *args):
+    global Notepads
+    note = " ".join(args)  # jeden dva tri -> ("jeden", "dva, "tri") -> "jeden dva tri"
+    if ctx.author.id not in Notepads:
+        user_notepad = UserNotepad(ctx.author.name)
+        user_notepad.add_note(note)
+        Notepads[ctx.author.id] = user_notepad
+        await ctx.send("Created new notepad")
+    else:
+        user_notepad = Notepads[ctx.author.id]
+        user_notepad.add_note(note)
+        await ctx.send("Added to existing notepad")
 
 
 bot.run("")
