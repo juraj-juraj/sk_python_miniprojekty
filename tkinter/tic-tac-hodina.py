@@ -4,7 +4,7 @@ window = tk.Tk()
 
 window.title("Tic Tac Toe")
 
-game_plan = [[0] * 3 for _ in range(3)]
+game_plan = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 
 class TicTacButton(
@@ -26,28 +26,37 @@ class TicTacButton(
 button_frame = tk.Frame(master=window)
 button_frame.pack()
 
-
-def press_right_button(
-    event,
-):  # Funkcia, ktorá sa spustí pri pravom kliknutí na tlačítko.
-    pressed_button: TicTacButton = (
-        event.widget
-    )  # Zistíme, ktoré tlačítko bolo stlačené.
-    if (
-        game_plan[pressed_button.get_row()][pressed_button.get_col()] == 0
-    ):  # Ak je políčko prázdne, zapíšeme tam X.
-        game_plan[pressed_button.get_row()][pressed_button.get_col()] = "X"
-        pressed_button.config(text="X")  # Zmeníme text tlačítka na X.
-    else:
-        print("Illegal move")  # Ak políčko nie je prázdne, vypíšeme chybovú hlášku.
-    print(game_plan)
+turn = "O"
 
 
-def press_left_button(event):
-    pressed_button: TicTacButton = event.widget
+def check_winner():
+    for row in range(3):
+        if game_plan[row][0] == game_plan[row][1] == game_plan[row][2]:
+            return game_plan[row][0]
+
+    for collumn in range(3):
+        if game_plan[0][collumn] == game_plan[1][collumn] == game_plan[2][collumn]:
+            return game_plan[0][collumn]
+
+    if game_plan[0][0] == game_plan[1][1] == game_plan[2][2]:
+        return game_plan[0][0]
+    if game_plan[0][2] == game_plan[1][1] == game_plan[2][0]:
+        return game_plan[0][2]
+
+    return 0
+
+
+def press_button(event):
+    global turn
+    global game_plan
+    pressed_button = event.widget
     if game_plan[pressed_button.get_row()][pressed_button.get_col()] == 0:
-        game_plan[pressed_button.get_row()][pressed_button.get_col()] = "O"
-        pressed_button.config(text="O")
+        game_plan[pressed_button.get_row()][pressed_button.get_col()] = turn
+        pressed_button.config(text=turn)
+        winner = check_winner()
+        if winner != 0:
+            print(f"Winner is {winner}")
+        turn = "X" if turn == "O" else "O"
     else:
         print("Illegal move")
     print(game_plan)
@@ -63,12 +72,7 @@ for act_row in range(3):
             col=act_col, row=act_row
         )  # Nastavíme pozíciu tlačítka.
         temp_button.bind(
-            "<Button-1>", press_left_button
+            "<Button>", press_button
         )  # Pripojíme funkciu, ktorá sa spustí pri ľavom kliknutí. <Button-1> znamená ľavé tlačítko.
-        temp_button.bind(
-            "<Button-3>", press_right_button
-        )  # Pripojíme funkciu, ktorá sa spustí pri pravom kliknutí. <Button-3> znamená pravé tlačítko.
 
 window.mainloop()
-
-
