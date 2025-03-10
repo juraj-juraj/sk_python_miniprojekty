@@ -19,6 +19,23 @@ def cipher_button_action(event):
     output_text.delete("1.0", tk.END)
     output_text.insert(tk.END, sifrovany_text[: len(sifrovany_text) - 1])
 
+def decipher_button_action(event):
+    text = input_text.get("1.0", tk.END)
+    ord_text = []
+    for char in text:
+        ord_text.append(ord(char))
+
+    for i in range(len(ord_text)):
+        ord_text[i] = ord_text[i] - 1
+
+    characters = []
+    for number in ord_text:
+        characters.append(chr(number))
+
+    sifrovany_text = "".join(characters)
+
+    output_text.delete("1.0", tk.END)
+    output_text.insert(tk.END, sifrovany_text[: len(sifrovany_text) - 1])
 
 main_window = tk.Tk()
 main_window.title("Cipher program")
@@ -32,8 +49,10 @@ input_label.grid(row=0, column=0)
 cipher_button = tk.Button(master=control_frame, text="Zasifruj")
 cipher_button.grid(row=0, column=1, padx=100)
 cipher_button.bind("<Button>", cipher_button_action)
+
 decipher_button = tk.Button(master=control_frame, text="Odsifruj")
 decipher_button.grid(row=0, column=2)
+decipher_button.bind("<Button>", decipher_button_action)
 
 control_frame.grid(row=0, column=0)
 

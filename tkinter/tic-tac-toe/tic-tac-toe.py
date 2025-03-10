@@ -118,9 +118,12 @@ for act_row in range(3):
 
 
 def reset_game(event):
+    global game_plan
+    global turn
     turn = "O"
     top_bar_label.write_normal(f"Turn {turn}")
     [button.clear() for button in all_buttons]
+    game_plan = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 
 reset_button = tk.Button(master=window, relief=tk.RAISED, text="Reset")
